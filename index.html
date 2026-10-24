@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#145c4d">
+  <meta name="description" content="Diário pessoal de glicose, alimentação e insulina.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <title>Glicose em Foco</title>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><div class="brandmark">G</div><div><strong>Glicose em Foco</strong><small>Seu diário, seus padrões</small></div></div>
+  <span class="local-badge">● Dados neste dispositivo</span>
+</header>
+<main class="container">
+  <section class="hero">
+    <div><p class="eyebrow">ACOMPANHAMENTO PESSOAL</p><h1>Entenda seus registros.<br><span>Enxergue os padrões.</span></h1>
+    <p class="hero-copy">Organize glicose, refeições e aplicações de insulina para preparar relatórios e perguntas melhores para sua equipe de saúde.</p></div>
+    <div class="hero-side"><span class="hero-icon">↗</span><p>Sem conexão com IA externa</p><small>Você decide quando copiar o relatório para outra IA.</small></div>
+  </section>
+
+  <section class="summary-grid" aria-label="Resumo">
+    <article class="metric"><span>Última glicose registrada</span><strong id="lastGlucose">—</strong><small id="lastGlucoseTime">Nenhuma leitura ainda</small></article>
+    <article class="metric"><span>Refeições registradas</span><strong id="mealCount">0</strong><small>Histórico local</small></article>
+    <article class="metric"><span>Aplicações registradas</span><strong id="insulinCount">0</strong><small>Não é recomendação de dose</small></article>
+    <article class="metric"><span>Leituras de glicose</span><strong id="glucoseCount">0</strong><small>Inclui registros manuais</small></article>
+  </section>
+
+  <nav class="tabs" aria-label="Seções">
+    <button class="tab active" data-tab="registro">＋ Registrar</button>
+    <button class="tab" data-tab="historico">◷ Histórico</button>
+    <button class="tab" data-tab="relatorios">▤ Relatórios e prompt</button>
+    <button class="tab" data-tab="config">⚙ Configurações</button>
+  </nav>
+
+  <section class="panel tab-panel" id="tab-registro">
+    <div class="section-heading"><div><p class="eyebrow">REGISTRO RÁPIDO</p><h2>O que você quer registrar?</h2></div><span class="muted">Horários editáveis</span></div>
+    <div class="form-grid">
+      <form id="glucoseForm" class="form-card">
+        <h3>Glicose atual</h3><p class="muted">Digite o valor que aparece no Libre.</p>
+        <label>Glicose (mg/dL)<input type="number" min="20" max="600" step="1" id="glucoseValue" required placeholder="Ex.: 126"></label>
+        <label>Data e horário<input type="datetime-local" id="glucoseTime" required></label>
+        <label>Tendência do Libre<select id="glucoseTrend"><option value="Não informada">Não informada</option><option>Subindo rapidamente</option><option>Subindo</option><option>Estável</option><option>Descendo</option><option>Descendo rapidamente</option></select></label>
+        <label>Observação (opcional)<input id="glucoseNote" maxlength="180" placeholder="Ex.: antes do almoço"></label>
+        <button class="primary full" type="submit">Salvar glicose</button>
+      </form>
+
+      <form id="mealForm" class="form-card">
+        <h3>Refeição</h3><p class="muted">Informe alimentos e quantidades como souber.</p>
+        <label>Data e horário<input type="datetime-local" id="mealTime" required></label>
+        <label>O que comeu?<textarea id="mealFoods" required rows="3" maxlength="1200" placeholder="Ex.: arroz 150 g, feijão 1 concha, frango 120 g"></textarea></label>
+        <label>Quantidade / porção (opcional)<input id="mealAmount" maxlength="300" placeholder="Ex.: prato médio; porções aproximadas"></label>
+        <label>Observações (opcional)<input id="mealNote" maxlength="300" placeholder="Ex.: caminhada antes da refeição"></label>
+        <button class="primary full" type="submit">Salvar refeição</button>
+      </form>
+
+      <form id="doseForm" class="form-card">
+        <h3>Aplicação de insulina</h3><p class="muted">Registre o que foi aplicado, sem sugestão de dose.</p>
+        <label>Insulina cadastrada<select id="doseInsulin" required><option value="">Cadastre uma insulina em Configurações</option></select></label>
+        <label>Quantidade (unidades)<input type="number" id="doseUnits" min="0.1" max="300" step="0.1" required placeholder="Ex.: 4"></label>
+        <label>Data e horário<input type="datetime-local" id="doseTime" required></label>
+        <label>Relacionada a uma refeição?<select id="doseRelation"><option value="Não informada">Não informada</option><option>Antes da refeição</option><option>Durante a refeição</option><option>Após a refeição</option><option>Basal / rotina</option><option>Correção conforme orientação profissional</option></select></label>
+        <label>Observação (opcional)<input id="doseNote" maxlength="300" placeholder="Ex.: local da aplicação"></label>
+        <button class="primary full" type="submit">Salvar aplicação</button>
+      </form>
+
+      <form id="insulinForm" class="form-card">
+        <h3>Cadastrar insulina</h3><p class="muted">Cadastre uma vez para facilitar os próximos registros.</p>
+        <label>Nome / marca<input id="insulinName" required maxlength="100" placeholder="Nome usado por você"></label>
+        <label>Tipo<select id="insulinType"><option>Rápida / ultrarrápida</option><option>Basal / longa ação</option><option>Pré-misturada</option><option>Outra / não sei</option></select></label>
+        <label>Observação opcional<input id="insulinNote" maxlength="200" placeholder="Ex.: concentração, se quiser registrar"></label>
+        <button class="secondary full" type="submit">Adicionar à lista</button>
+        <div id="insulinList" class="insulin-list"></div>
+      </form>
+    </div>
+    <div class="notice"><strong>Importante:</strong> este diário organiza informações; não calcula doses nem substitui orientações médicas. Se houver sintomas ou uma leitura preocupante, siga seu plano de tratamento e as orientações da sua equipe de saúde.</div>
+  </section>
+
+  <section class="panel tab-panel hidden" id="tab-historico">
+    <div class="section-heading"><div><p class="eyebrow">SEUS REGISTROS</p><h2>Histórico recente</h2></div><select id="historyFilter" aria-label="Filtrar histórico"><option value="all">Todos os registros</option><option value="glucose">Glicose</option><option value="meal">Refeições</option><option value="dose">Insulina</option></select></div>
+    <div id="historyList" class="history-list"></div>
+  </section>
+
+  <section class="panel tab-panel hidden" id="tab-relatorios">
+    <div class="section-heading"><div><p class="eyebrow">VISÃO DOS ÚLTIMOS 3 MESES</p><h2>Relatório e análise externa</h2></div></div>
+    <p class="muted">O relatório usa os registros salvos nos três meses anteriores à data de geração. O prompt será montado com os dados disponíveis para você revisar e colar em uma IA de sua escolha.</p>
+    <div class="report-actions">
+      <button class="primary" id="pdfBtn">Gerar PDF / Imprimir</button>
+      <button class="secondary" id="promptBtn">Gerar prompt avançado</button>
+      <button class="ghost" id="exportBtn">Exportar dados JSON</button>
+    </div>
+    <div id="reportSummary" class="report-summary"></div>
+    <label class="prompt-label">Prompt gerado — revise antes de compartilhar<textarea id="promptOutput" rows="18" placeholder="Clique em “Gerar prompt avançado” para montar o texto com seus registros."></textarea></label>
+    <div class="report-actions"><button class="primary" id="copyPromptBtn">Copiar prompt</button><button class="ghost" id="downloadPromptBtn">Baixar .txt</button></div>
+    <div class="notice"><strong>Privacidade:</strong> os registros ficam neste navegador/dispositivo nesta versão. Exportações podem conter dados sensíveis de saúde. Não compartilhe sem revisar e não use conclusões geradas por IA para ajustar insulina por conta própria.</div>
+  </section>
+
+  <section class="panel tab-panel hidden" id="tab-config">
+    <div class="section-heading"><div><p class="eyebrow">PREFERÊNCIAS</p><h2>Lembretes e dados</h2></div></div>
+    <div class="settings-grid">
+      <div class="form-card">
+        <h3>Lembrete para registrar glicose</h3>
+        <p class="muted">Tenta avisar a cada 30 minutos enquanto este app estiver aberto. O navegador pode limitar notificações e temporizadores em segundo plano.</p>
+        <label class="switch-row"><input type="checkbox" id="reminderEnabled"> Ativar lembretes</label>
+        <label>Intervalo<select id="reminderInterval"><option value="30">A cada 30 minutos</option><option value="60">A cada 60 minutos</option><option value="120">A cada 2 horas</option></select></label>
+        <label>Início<input type="time" id="reminderStart" value="08:00"></label>
+        <label>Fim<input type="time" id="reminderEnd" value="22:00"></label>
+        <button class="secondary full" id="saveReminderBtn" type="button">Salvar lembretes</button>
+        <p id="reminderStatus" class="muted small"></p>
+      </div>
+      <div class="form-card">
+        <h3>Backup e exclusão</h3>
+        <p class="muted">Exporte seus registros regularmente para manter uma cópia. Esta versão não sincroniza entre dispositivos.</p>
+        <button class="ghost full" id="exportSettingsBtn" type="button">Baixar backup JSON</button>
+        <button class="danger full" id="clearDataBtn" type="button">Apagar todos os dados locais</button>
+        <p class="small muted">A exclusão é permanente neste navegador. Exporte antes se quiser guardar uma cópia.</p>
+      </div>
+    </div>
+  </section>
+  <footer>Glicose em Foco · Protótipo local · Não é dispositivo médico</footer>
+</main>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>

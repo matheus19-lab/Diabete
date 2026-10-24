@@ -1,0 +1,804 @@
+/* ==========================================================================
+   Glicose em Foco — folha de estilos
+   Sem dependências externas: fontes do sistema, ícones desenhados em CSS.
+   Estrutura:
+   1. Tokens (variáveis)      5. Resumo (métricas)       9. Histórico
+   2. Base e acessibilidade   6. Navegação por abas      10. Relatórios
+   3. Cabeçalho               7. Formulários e botões    11. Configurações, toast
+   4. Introdução (hero)       8. Registro / insulinas    12. Responsivo e impressão
+   ========================================================================== */
+
+/* 1. Tokens ---------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+
+  /* Neutros (levemente esverdeados, para combinar com a cor principal) */
+  --ink: #17211e;
+  --ink-2: #3a4743;
+  --muted: #5b6a65;
+  --placeholder: #6b7873;
+  --line: #dde3e0;
+  --line-strong: #c3ccc8;
+  --bg: #f3f5f4;
+  --surface: #ffffff;
+  --surface-2: #f8faf9;
+
+  /* Cor principal: verde-abeto */
+  --primary: #145c4d;
+  --primary-hover: #0f4a3e;
+  --primary-active: #0a3a30;
+  --primary-soft: #e4f0ec;
+  --primary-line: #bcd6ce;
+  --on-primary: #ffffff;
+
+  /* Semânticas de glicemia (sempre acompanhadas de texto, nunca só cor) */
+  --low: #b42318;
+  --low-soft: #fdecea;
+  --range: #1f7a4d;
+  --range-soft: #e3f3ea;
+  --high: #9a5b00;
+  --high-soft: #fbf0dc;
+
+  /* Tipos de registro (histórico e formulários) */
+  --kind-glucose: var(--primary);
+  --kind-glucose-soft: var(--primary-soft);
+  --kind-meal: #8a5a00;
+  --kind-meal-soft: #f8edd6;
+  --kind-dose: #3f5662;
+  --kind-dose-soft: #e6ecef;
+
+  /* Tipografia */
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI Variable Text", "Segoe UI",
+    "Noto Sans", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "DejaVu Sans Mono", Menlo, Consolas, monospace;
+
+  /* Espaçamento */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+
+  /* Raios */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+
+  /* Sombras (bem discretas) */
+  --shadow-1: 0 1px 2px rgba(23, 33, 30, 0.05);
+  --shadow-pop: 0 8px 24px rgba(23, 33, 30, 0.22);
+
+  /* Layout */
+  --maxw: 1120px;
+  --gutter: 24px;
+  --tap: 44px;
+}
+
+/* 2. Base e acessibilidade ------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 15px/1.5 var(--font);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+}
+
+p { margin: 0; }
+
+.hidden { display: none !important; }
+.muted { color: var(--muted); line-height: 1.55; }
+.small { font-size: 12.5px; }
+
+:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+::selection { background: var(--primary-soft); color: var(--ink); }
+
+/* Rótulo de seção: frase curta em minúsculas com inicial maiúscula */
+.eyebrow {
+  margin: 0 0 var(--s-2);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: lowercase;
+}
+.eyebrow::first-letter { text-transform: uppercase; }
+
+/* 3. Cabeçalho ------------------------------------------------------------- */
+.topbar {
+  min-height: 64px;
+  padding: 10px max(var(--gutter), calc((100% - var(--maxw)) / 2 + var(--gutter)));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand { display: flex; align-items: center; gap: var(--s-3); min-width: 0; }
+
+.brandmark {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-md);
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.brand strong { display: block; font-size: 16px; font-weight: 650; letter-spacing: -0.01em; }
+.brand small { display: block; margin-top: 1px; color: var(--muted); font-size: 12.5px; }
+
+.local-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid var(--primary-line);
+  border-radius: 99px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.local-badge::first-letter { color: var(--range); }
+
+.container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--gutter) var(--s-7);
+}
+
+/* 4. Introdução (hero) ----------------------------------------------------- */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: var(--s-7);
+  align-items: end;
+  padding: var(--s-7) 0 var(--s-6);
+}
+
+.hero .eyebrow { color: var(--primary); }
+
+.hero h1 {
+  font-size: clamp(28px, 4.2vw, 40px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+}
+.hero h1 span { color: var(--muted); font-weight: 600; }
+
+.hero-copy {
+  max-width: 58ch;
+  margin-top: var(--s-4);
+  color: var(--ink-2);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.hero-side {
+  padding: 0 0 0 var(--s-5);
+  border-left: 1px solid var(--line-strong);
+}
+
+/* Cadeado desenhado em CSS (o glifo do HTML fica oculto) */
+.hero-icon {
+  position: relative;
+  display: block;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md);
+  background: var(--primary-soft);
+  color: transparent;
+  font-size: 0;
+}
+.hero-icon::before {
+  content: "";
+  position: absolute;
+  left: 11px;
+  top: 17px;
+  width: 14px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--primary);
+}
+.hero-icon::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 10px;
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--primary);
+  border-bottom: 0;
+  border-radius: 5px 5px 0 0;
+}
+
+.hero-side p { margin: var(--s-3) 0 var(--s-1); font-size: 14.5px; font-weight: 650; }
+.hero-side small { display: block; color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+/* 5. Resumo (métricas) — uma única faixa, divisórias de 1px ---------------- */
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 1px;
+  margin: 0 0 var(--s-6);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--line);
+  box-shadow: var(--shadow-1);
+}
+
+.metric { min-width: 0; padding: var(--s-4) var(--s-5) 18px; background: var(--surface); }
+.metric span { display: block; color: var(--muted); font-size: 13px; font-weight: 500; }
+.metric strong {
+  display: block;
+  margin: var(--s-2) 0 2px;
+  font-size: 26px;
+  font-weight: 650;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.metric:first-child strong { font-size: 34px; letter-spacing: -0.03em; }
+.metric small { display: block; color: var(--muted); font-size: 12.5px; }
+
+/* 6. Navegação por abas ---------------------------------------------------- */
+.tabs {
+  display: flex;
+  gap: var(--s-1);
+  margin: 0 0 var(--s-5);
+  overflow-x: auto;
+  scrollbar-width: none;
+  box-shadow: inset 0 -1px 0 var(--line);
+}
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  position: relative;
+  flex: 0 0 auto;
+  min-height: 48px;
+  padding: 0 var(--s-4);
+  border: 0;
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+  background: transparent;
+  color: var(--muted);
+  font: 600 14.5px/1 var(--font);
+  font-variant-emoji: text;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.15s, background-color 0.15s;
+}
+.tab:hover { color: var(--ink); background: rgba(23, 33, 30, 0.04); }
+.tab:focus-visible { outline-offset: -3px; }
+.tab.active { color: var(--primary); }
+.tab.active::after {
+  content: "";
+  position: absolute;
+  left: var(--s-3);
+  right: var(--s-3);
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--primary);
+}
+
+/* Painéis: sem caixa externa — só os cartões de formulário têm superfície */
+.panel { padding: 0; border: 0; background: transparent; }
+.tab-panel { animation: panel-in 0.16s ease-out; }
+@keyframes panel-in { from { opacity: 0; } to { opacity: 1; } }
+
+.section-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s-3) var(--s-4);
+  margin: 0 0 var(--s-5);
+}
+.section-heading > div { min-width: 0; }
+.section-heading h2 { font-size: 24px; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+.section-heading > .muted { font-size: 13px; }
+.panel > .muted { max-width: 68ch; }
+
+/* 7. Formulários e botões -------------------------------------------------- */
+.form-grid,
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-4);
+  align-items: start;
+}
+.form-grid > *, .settings-grid > * { min-width: 0; }
+
+.form-card {
+  min-width: 0;
+  padding: var(--s-5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+}
+.form-card h3 { display: flex; align-items: center; gap: var(--s-2); font-size: 17px; font-weight: 650; }
+.form-card > p { margin: var(--s-1) 0 var(--s-4); font-size: 13.5px; }
+.form-card > p.small { margin: var(--s-3) 0 0; font-size: 12.5px; }
+
+/* Marcador de tipo, igual ao usado no histórico */
+#glucoseForm h3::before,
+#mealForm h3::before,
+#doseForm h3::before,
+#insulinForm h3::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  background: var(--kind-glucose);
+}
+#mealForm h3::before { background: var(--kind-meal); }
+#doseForm h3::before,
+#insulinForm h3::before { background: var(--kind-dose); }
+
+.form-card label,
+.prompt-label {
+  display: block;
+  margin: 0 0 var(--s-4);
+  color: var(--ink-2);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.form-card input:not([type="checkbox"]),
+.form-card select,
+.form-card textarea,
+.section-heading select,
+.prompt-label textarea {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: var(--tap);
+  margin-top: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--ink);
+  font: 400 15px/1.4 var(--font);
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.form-card input:not([type="checkbox"]):hover,
+.form-card select:hover,
+.form-card textarea:hover,
+.section-heading select:hover,
+.prompt-label textarea:hover { border-color: #9aa9a3; }
+
+.form-card input:not([type="checkbox"]):focus,
+.form-card select:focus,
+.form-card textarea:focus,
+.section-heading select:focus,
+.prompt-label textarea:focus {
+  border-color: var(--primary);
+  outline: 2px solid var(--primary);
+  outline-offset: 0;
+}
+
+.form-card input:user-invalid,
+.form-card select:user-invalid,
+.form-card textarea:user-invalid { border-color: var(--low); }
+
+::placeholder { color: var(--placeholder); opacity: 1; }
+.form-card textarea { min-height: 92px; resize: vertical; }
+
+.form-card select,
+.section-heading select {
+  padding-right: 38px;
+  appearance: none;
+  -webkit-appearance: none;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%235b6a65' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 12px 8px;
+}
+
+.form-card input[type="datetime-local"],
+.form-card input[type="time"] { -webkit-appearance: none; appearance: none; text-align: left; }
+.form-card input::-webkit-date-and-time-value { text-align: left; }
+
+/* Botões */
+.primary,
+.secondary,
+.ghost,
+.danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
+  padding: 0 var(--s-5);
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  font: 650 14.5px/1.2 var(--font);
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s, transform 0.08s;
+}
+.primary:active, .secondary:active, .ghost:active, .danger:active { transform: translateY(1px); }
+
+.primary { background: var(--primary); color: var(--on-primary); }
+.primary:hover { background: var(--primary-hover); }
+.primary:active { background: var(--primary-active); }
+
+.secondary { background: var(--primary-soft); border-color: var(--primary-line); color: var(--primary); }
+.secondary:hover { background: #d6e8e2; }
+.secondary:active { background: #c9e0d8; }
+
+.ghost { background: var(--surface); border-color: var(--line-strong); color: var(--ink-2); }
+.ghost:hover { background: var(--surface-2); border-color: #9aa9a3; color: var(--ink); }
+.ghost:active { background: var(--bg); }
+
+.danger { background: var(--surface); border-color: #e3b3ad; color: var(--low); }
+.danger:hover { background: var(--low-soft); border-color: var(--low); }
+.danger:active { background: #f8d9d5; }
+
+.primary:disabled, .secondary:disabled, .ghost:disabled, .danger:disabled,
+button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.full { width: 100%; margin-top: var(--s-2); }
+
+/* Interruptor (lembretes) */
+.form-card label.switch-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin: var(--s-4) 0;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+.switch-row input[type="checkbox"] {
+  position: relative;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 26px;
+  margin: 0;
+  border: 0;
+  border-radius: 13px;
+  background: #8a9893;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+.switch-row input[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s;
+}
+.switch-row input[type="checkbox"]:checked { background: var(--primary); }
+.switch-row input[type="checkbox"]:checked::before { transform: translateX(18px); }
+
+/* 8. Registro: aviso e lista de insulinas ---------------------------------- */
+.notice {
+  margin-top: var(--s-5);
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.notice strong { color: var(--ink); font-weight: 650; }
+
+.insulin-list { margin-top: var(--s-4); display: grid; gap: var(--s-2); }
+.insulin-list:empty { display: none; }
+
+.insulin-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.insulin-chip span { min-width: 0; color: var(--muted); overflow-wrap: anywhere; }
+.insulin-chip strong { color: var(--ink); font-size: 14px; font-weight: 650; }
+.insulin-chip button {
+  flex: 0 0 auto;
+  min-height: 36px;
+  padding: 0 var(--s-2);
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--low);
+  font: 600 13px var(--font);
+  cursor: pointer;
+}
+.insulin-chip button:hover { background: var(--low-soft); }
+
+/* 9. Histórico ------------------------------------------------------------- */
+.section-heading select { width: auto; min-width: 200px; margin-top: 0; }
+
+.history-list {
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+}
+.history-list > .muted { padding: var(--s-6) var(--s-5); text-align: center; }
+
+.history-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-5);
+  border: 0;
+  border-bottom: 1px solid var(--line);
+}
+.history-item:last-child { border-bottom: 0; }
+
+.history-symbol {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-md);
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 700;
+}
+/* Cor por tipo (letra G/R/I continua identificando o tipo sem depender de cor) */
+.history-item:has([data-kind="meal"]) .history-symbol { background: var(--kind-meal-soft); color: var(--kind-meal); }
+.history-item:has([data-kind="dose"]) .history-symbol { background: var(--kind-dose-soft); color: var(--kind-dose); }
+
+.history-main { flex: 1; min-width: 0; }
+.history-main strong { display: block; font-size: 15px; font-weight: 650; line-height: 1.35; }
+.history-main p { margin: 2px 0 0; color: var(--muted); font-size: 13.5px; line-height: 1.5; overflow-wrap: anywhere; }
+
+.history-item > div:last-child {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  text-align: right;
+}
+.history-time { color: var(--muted); font-size: 12.5px; white-space: nowrap; }
+
+.delete-record {
+  min-height: 36px;
+  padding: 0 var(--s-2);
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--low);
+  font: 600 13px var(--font);
+  cursor: pointer;
+}
+.delete-record:hover { background: var(--low-soft); }
+
+/* 10. Relatórios ----------------------------------------------------------- */
+.report-actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin: var(--s-5) 0; }
+
+.report-summary {
+  margin: 0 0 var(--s-5);
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+  font-size: 14.5px;
+  line-height: 1.95;
+}
+.report-summary strong { color: var(--ink-2); font-weight: 600; }
+.report-summary .muted.small { display: block; margin-top: var(--s-2); line-height: 1.5; }
+
+.prompt-label { margin: 0 0 var(--s-1); }
+.prompt-label textarea {
+  min-height: 320px;
+  padding: var(--s-4);
+  background: var(--surface-2);
+  color: var(--ink);
+  font: 400 13px/1.6 var(--font-mono);
+  font-variant-numeric: normal;
+  resize: vertical;
+}
+
+/* Relatório montado para impressão (oculto na tela) */
+#printReport { display: none; }
+
+/* 11. Configurações e mensagens -------------------------------------------- */
+#tab-config .form-card .full + .full { margin-top: var(--s-3); }
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  z-index: 50;
+  display: none;
+  max-width: min(92vw, 420px);
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-md);
+  background: var(--ink);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  box-shadow: var(--shadow-pop);
+  transform: translateX(-50%);
+}
+.toast.show { display: block; animation: toast-in 0.18s ease-out; }
+@keyframes toast-in { from { opacity: 0; } to { opacity: 1; } }
+
+footer {
+  padding: var(--s-6) 0 0;
+  color: var(--muted);
+  font-size: 12.5px;
+  text-align: center;
+}
+
+/* 12. Responsivo ----------------------------------------------------------- */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; gap: var(--s-5); padding: var(--s-6) 0 var(--s-5); align-items: start; }
+  .hero-side { padding: var(--s-4) 0 0; border-left: 0; border-top: 1px solid var(--line-strong); }
+  .summary-grid { grid-template-columns: repeat(3, 1fr); }
+  .metric:first-child { grid-column: 1 / -1; }
+}
+
+@media (max-width: 760px) {
+  :root { --gutter: 16px; }
+  .form-grid, .settings-grid { grid-template-columns: 1fr; }
+  .form-card { padding: var(--s-4); }
+  .section-heading h2 { font-size: 21px; }
+  .section-heading select { flex: 1 1 100%; width: 100%; }
+
+  /* 16px evita o zoom automático de campos no iOS */
+  .form-card input:not([type="checkbox"]),
+  .form-card select,
+  .form-card textarea,
+  .section-heading select,
+  .prompt-label textarea { font-size: 16px; }
+  .prompt-label textarea { font-size: 13px; }
+
+  .history-item { flex-wrap: wrap; padding: var(--s-3) var(--s-4); }
+  .history-item > div:last-child {
+    flex: 1 0 calc(100% - 48px);
+    margin-left: 48px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .history-time { white-space: normal; text-align: left; }
+
+  .report-actions > button { flex: 1 1 100%; }
+  .report-summary { padding: var(--s-4); }
+}
+
+@media (max-width: 560px) {
+  .brand small { display: none; }
+  .local-badge { font-size: 12px; padding: 5px 10px; }
+  .hero h1 { font-size: 27px; }
+  .hero-copy { font-size: 15px; }
+
+  .summary-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .metric { padding: var(--s-3); }
+  .metric span { font-size: 12px; }
+  .metric strong { font-size: 21px; }
+  .metric:first-child strong { font-size: 30px; }
+  .metric small { font-size: 11.5px; }
+
+  /* Abas viram quatro botões (2×2) para nada ficar escondido */
+  .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2); overflow: visible; box-shadow: none; }
+  .tab {
+    min-height: var(--tap);
+    padding: var(--s-2) var(--s-3);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    background: var(--surface);
+    white-space: normal;
+    line-height: 1.25;
+  }
+  .tab:focus-visible { outline-offset: 2px; }
+  .tab.active { border-color: var(--primary-line); background: var(--primary-soft); }
+  .tab.active::after { display: none; }
+}
+
+/* Movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Contraste forçado (Windows) */
+@media (forced-colors: active) {
+  .tab.active { outline: 2px solid Highlight; }
+  .switch-row input[type="checkbox"] { border: 1px solid ButtonText; }
+}
+
+/* Impressão: só o relatório (#printReport) aparece ---------------------- */
+@media print {
+  @page { margin: 14mm 12mm; }
+
+  html, body { background: #fff !important; color: #000; }
+  body { font-size: 11px; line-height: 1.4; }
+
+  .topbar, .hero, .summary-grid, .tabs, footer, .toast,
+  .tab-panel:not(#tab-relatorios),
+  #tab-relatorios > *:not(#printReport) { display: none !important; }
+
+  .container { max-width: none; padding: 0; }
+  #tab-relatorios { padding: 0; border: 0; animation: none; }
+  #printReport { display: block !important; }
+
+  #printReport h1 { margin: 0 0 4px; font-size: 18px; letter-spacing: 0; }
+  #printReport h2 { margin: 0 0 6px; font-size: 13px; letter-spacing: 0; break-after: avoid; page-break-after: avoid; }
+  #printReport p { margin: 4px 0; }
+  .print-note { color: #444; font-size: 9.5px; line-height: 1.4; }
+  .print-section { margin: 14px 0; }
+
+  .print-table { width: 100%; border-collapse: collapse; font-size: 10px; }
+  .print-table thead { display: table-header-group; }
+  .print-table tr { break-inside: avoid; page-break-inside: avoid; }
+  .print-table th,
+  .print-table td { padding: 4px 6px; border: 1px solid #aaa; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+  .print-table th {
+    background: #ececec;
+    font-weight: 650;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
