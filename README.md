@@ -48,9 +48,7 @@ Não abra apenas `index.html` com `file://`, pois service workers e recursos PWA
 4. Testes automatizados, criptografia local e estratégia de backup.
 5. Lembretes mais confiáveis via app móvel/PWA conforme suporte do sistema.
 
-## Publicar (deploy)
 
-São só arquivos estáticos: envie a pasta inteira (com `index.html` na raiz) para Netlify, GitHub Pages, Cloudflare Pages ou Vercel. Precisa ser HTTPS. Ao alterar qualquer arquivo, aumente o número de `CACHE_NAME` em `sw.js` (v2 → v3…) para os usuários receberem a versão nova.
 
 ## Onde ficam os dados
 
